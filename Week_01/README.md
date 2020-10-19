@@ -51,3 +51,10 @@ public class com.geektime.Hello {
 }
 ```
 
+
+一个字节=8位，2^8=256，补码最高位表示正负，所以-128-127
+8=2*4,4位最多表示0-15，16进制0-F
+
+
+参考资料
+https://dzone.com/articles/java-memory-architecture-model-garbage-collection
