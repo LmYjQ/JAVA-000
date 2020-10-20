@@ -53,15 +53,23 @@ public class com.geektime.Hello {
 代码见src/com/geektime/HelloClassLoader.java
 ### print结果理解
 一个字节=8位，2^8=256，补码最高位表示正负，所以-128-127
+
 8=2*4,4位最多表示0-15，16进制0-F
 
 ## 3.参数理解
-[!image](https://github.com/LmYjQ/JAVA-000/tree/main/Week_01/jvm_cheatseet.jpg)
+### 3.1堆内存
+![image](https://github.com/LmYjQ/JAVA-000/tree/main/Week_01/jvm_cheatseet.jpg)
 Xms、XmX为堆内存的最小-最大值，这里存了所有的对象。对象被所有线程共享。
+
 Xmn为新生代内存占用量，G1GC不需要（G1设置每个小块的内存和块的数量）。
-Meta
-DirectMemory
+### 3.2栈内存
 Xss为每个线程栈的内存占用，这里存了每个方法的局部变量。
+
+### 3.3其他
+![image](https://github.com/LmYjQ/JAVA-000/tree/main/Week_01/JMM.jpeg)
+Meta代替JDK8之前的永久区，保存类定义等不变的信息（类似metadata）
+
+DirectMemory用于提高IO效率
 
 
 参考资料
