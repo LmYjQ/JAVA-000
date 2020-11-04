@@ -29,29 +29,24 @@ public class OkhttpOutboundHandler {
 
     public OkhttpOutboundHandler(String backendUrl) {
         this.backendUrl = backendUrl.endsWith("/") ? backendUrl.substring(0, backendUrl.length() - 1) : backendUrl;
-
-//        OkHttpClient client = new OkHttpClient();
-//        String url = "http://localhost:8801";
-//        Request request = new Request.Builder().url(url).build();
-//        try (Response response = client.newCall(request).execute()) {
-//            String resp = Objects.requireNonNull(response.body()).string();
-//            System.out.println(resp);
-//        }
     }
 
-    public void handle(final FullHttpRequest fullRequest, final ChannelHandlerContext ctx) throws IOException {
-        Request request = new Request.Builder().url(this.backendUrl).build();
+    public void handle(final FullHttpRequest fullRequest, final ChannelHandlerContext ctx) throws Exception {
+        final String url = this.backendUrl + fullRequest.uri();
+        Request request = new Request.Builder().url(url).build();
         Response response = client.newCall(request).execute();
+        handleResponse(fullRequest, ctx, response);
     }
 
-    private void handleResponse(final FullHttpRequest fullRequest, final ChannelHandlerContext ctx, final HttpResponse endpointResponse) throws Exception {
+    private void handleResponse(final FullHttpRequest fullRequest, final ChannelHandlerContext ctx, final Response endpointResponse) throws Exception {
         FullHttpResponse response = null;
         try {
-            byte[] body = EntityUtils.toByteArray(endpointResponse.getEntity());
+            byte[] body = endpointResponse.body().bytes();
 
             response = new DefaultFullHttpResponse(HTTP_1_1, OK, Unpooled.wrappedBuffer(body));
             response.headers().set("Content-Type", "application/json");
-            response.headers().setInt("Content-Length", Integer.parseInt(endpointResponse.getFirstHeader("Content-Length").getValue()));
+            response.headers().setInt("Content-Length", body.length);
+            ctx.write(response);
         } catch (Exception e) {
             e.printStackTrace();
             response = new DefaultFullHttpResponse(HTTP_1_1, NO_CONTENT);
