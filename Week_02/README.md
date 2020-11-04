@@ -96,6 +96,7 @@ taskQueue：任务队列
 pipeline：执行任务的步骤
 (server)bootstrap:启动（服务器）客户端
 handler: 包含encode/decode/handle
+ChannelHandlerContext:负责维护多个handler之间的关系
 
 run一个server/client，代码差别不大
 
@@ -126,6 +127,17 @@ boss配置线程数少，worker多
 2. 改造成netty版
 3. 实现filter/router，组合：filter加一个kv
 4. router：负载均衡 Random/RoundRibbon/Weight
+
+加上inputStream的read和close，curl不报错connection reset by peer
+```
+BufferedInputStream inputStream = new BufferedInputStream(socket.getInputStream());
+inputStream.read();
+printWriter.write("hello,nio");
+printWriter.close();
+socket.close();
+inputStream.close();
+```
+
 
 Ref：
 http://tutorials.jenkov.com/java-nio/overview.html
