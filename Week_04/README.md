@@ -1,4 +1,7 @@
 学习笔记
+## 线程状态
+阻塞！=线程状态BLOCKED
+比如 synchronize 机制有可能让线程进入BLOCKED 状态，sleep，wait等方法则可能让其进入 WATING 之类的状态。
 
 ## 锁思想
 尽量加小锁，锁尽量小的范围
@@ -32,6 +35,9 @@ cyclicBarrir：每个子线程await，聚合点在子线程。可以加回调函
 ## 集合
 copyOnWriteArray:用副本
 concurrentHashMap:JDK7分段锁，8 CAS
+
+HashMap坑：key不能保证顺序，因为链表转红黑树，LinkedHashMap可以保证
+
 
 尾递归（最后一行return是递归）一定可以优化为循环
 
